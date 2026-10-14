@@ -2,10 +2,10 @@
 
 namespace App\Tests\Controller;
 
+use App\Tests\AbstractWebTestCase;
 use PHPUnit\Framework\Attributes\TestWith;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-class AlbumControllerTest extends WebTestCase
+class AlbumControllerTest extends AbstractWebTestCase
 {
 
     #[TestWith([109, 'S16 - 01:29:43', 'single'])]
@@ -15,7 +15,7 @@ class AlbumControllerTest extends WebTestCase
     public function testAccessOK(int $albumId, string $title, string $type): void
     {
         $client = static::createClient();
-        $client->request('GET', '/album/' . $albumId);
+        $client->request('GET', self::URL_ALBUM . '/' . $albumId);
 
         $this->assertResponseIsSuccessful();
         $this->assertSelectorTextContains('h1.card-title', $title);
