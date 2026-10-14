@@ -4,37 +4,36 @@
 namespace App\Tests\Controller;
 
 
-use App\Repository\UserRepository;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use App\Tests\AbstractWebTestCase;
+use PHPUnit\Framework\Attributes\TestWith;
 
 /**
  * Class ProfilController.php
  *
  * @author Kevin Tourret
  */
-class ProfilControllerTest extends WebTestCase
+class ProfilControllerTest extends AbstractWebTestCase
 {
 
-    public function testAccessOK(): void
+    #[TestWith(['kelly.cassin@example.com'])]
+    #[TestWith(['admin@admin.fr'])]
+    public function testAccessOK(string $email): void
     {
         $client = static::createClient();
+        $this->loginUser($client, $email);
 
-        /** @var UserRepository $userRepo */
-        $userRepo = $this->getContainer()->get(UserRepository::class);
-        $client->loginUser($userRepo->findOneBy(['email' => 'kelly.cassin@example.com']));
-
-        $client->request('GET', '/profil');
+        $client->request('GET', self::URL_PROFILE);
 
         $this->assertResponseIsSuccessful();
-        $this->assertSelectorTextContains('h1', 'Welcome ' . 'kelly.cassin@example.com');
+        $this->assertSelectorTextContains('h1', 'Welcome ' . $email);
     }
 
     public function testAccessKO(): void
     {
         $client = static::createClient();
-        $client->request('GET', '/profil');
+        $client->request('GET', self::URL_PROFILE);
 
-        $this->assertResponseRedirects('/login');
+        $this->assertResponseRedirects(self::URL_LOGIN);
     }
 
 }

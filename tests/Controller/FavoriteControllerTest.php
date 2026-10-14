@@ -2,21 +2,20 @@
 
 namespace App\Tests\Controller;
 
-use App\Repository\UserRepository;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use App\Tests\AbstractWebTestCase;
+use PHPUnit\Framework\Attributes\TestWith;
 
-class FavoriteControllerTest extends WebTestCase
+class FavoriteControllerTest extends AbstractWebTestCase
 {
 
-    public function testAccessOK(): void
+    #[TestWith(['kelly.cassin@example.com'])]
+    #[TestWith(['admin@admin.fr'])]
+    public function testAccessOK(string $email): void
     {
         $client = static::createClient();
+        $this->loginUser($client, $email);
 
-        /** @var UserRepository $userRepo */
-        $userRepo = $this->getContainer()->get(UserRepository::class);
-        $client->loginUser($userRepo->findOneBy(['email' => 'kelly.cassin@example.com']));
-
-        $client->request('GET', '/favoris');
+        $client->request('GET', self::URL_FAVORITE);
 
         $this->assertResponseIsSuccessful();
         $this->assertSelectorTextContains('h1', 'Mes favoris');
@@ -25,9 +24,9 @@ class FavoriteControllerTest extends WebTestCase
     public function testAccessKO(): void
     {
         $client = static::createClient();
-        $client->request('GET', '/favoris');
+        $client->request('GET', self::URL_FAVORITE);
 
-        $this->assertResponseRedirects('/login');
+        $this->assertResponseRedirects(self::URL_LOGIN);
     }
 
 }
