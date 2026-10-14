@@ -47,10 +47,10 @@ class AppFixtures extends Fixture
                 'album' => AlbumFactory::findOrCreate(['title' => $albums[$i]])
             ]);
         }
-        TrackFactory::createMany(3000);
-        PlaylistFactory::createMany(500);
-        FavoriteFactory::createMany(700);
-        HistoryFactory::createMany(900);
+        TrackFactory::createMany(100);
+        PlaylistFactory::createMany(50);
+        FavoriteFactory::createMany(50);
+        HistoryFactory::createMany(500);
         $manager->flush();
     }
 }

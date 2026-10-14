@@ -8,10 +8,9 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 class AlbumControllerTest extends WebTestCase
 {
 
-    #[TestWith([1, 'S16 - 01:40:18', 'album'])]
-    #[TestWith([66, 'Fuga possimus. - 01:45:39', 'EP'])]
-    #[TestWith([80, 'Voluptates molestias. - 01:12:03', 'single'])]
-    #[TestWith([109, 'Oui oui - 00:00:00', 'single'])]
+    #[TestWith([1, 'S16 - 00:07:42', 'single'])]
+    #[TestWith([103, 'Tempora saepe cumque. - 00:02:52', 'EP'])]
+    #[TestWith([108, 'Sit quisquam explicabo. - 00:00:00', 'album'])]
     public function testAccessOK(int $albumId, string $title, string $type): void
     {
         $client = static::createClient();
