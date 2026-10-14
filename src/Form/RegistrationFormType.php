@@ -14,6 +14,7 @@ use Symfony\Component\Validator\Constraints\IsTrue;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
+
 class RegistrationFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -51,6 +52,9 @@ class RegistrationFormType extends AbstractType
                     'autocomplete' => 'new-password',
                     'placeholder' => 'Choisissez un mot de passe'
                 ],
+                'constraints' => [
+                    new NotBlank(),
+                ]
             ])
             ->add('submit', SubmitType::class, [
                 'label' => 'S\'inscrire',

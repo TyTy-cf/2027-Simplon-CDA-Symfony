@@ -69,5 +69,4 @@ class SecurityControllerTest extends AbstractWebTestCase
 
         $this->assertSelectorExists('a[href="/logout"]');
     }
-
 }
