@@ -14,7 +14,7 @@ class FavoriteControllerTest extends WebTestCase
 
         /** @var UserRepository $userRepo */
         $userRepo = $this->getContainer()->get(UserRepository::class);
-        $client->loginUser($userRepo->findOneBy(['email' => 'florine13@example.org']));
+        $client->loginUser($userRepo->findOneBy(['email' => 'kelly.cassin@example.com']));
 
         $client->request('GET', '/favoris');
 

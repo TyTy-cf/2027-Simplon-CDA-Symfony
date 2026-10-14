@@ -21,12 +21,12 @@ class ProfilControllerTest extends WebTestCase
 
         /** @var UserRepository $userRepo */
         $userRepo = $this->getContainer()->get(UserRepository::class);
-        $client->loginUser($userRepo->findOneBy(['email' => 'florine13@example.org']));
+        $client->loginUser($userRepo->findOneBy(['email' => 'kelly.cassin@example.com']));
 
         $client->request('GET', '/profil');
 
         $this->assertResponseIsSuccessful();
-        $this->assertSelectorTextContains('h1', 'Welcome ' . 'florine13@example.org');
+        $this->assertSelectorTextContains('h1', 'Welcome ' . 'kelly.cassin@example.com');
     }
 
     public function testAccessKO(): void

@@ -25,8 +25,8 @@ RUN echo "upload_max_filesize=512M" > /usr/local/etc/php/conf.d/upload_max_files
 RUN git config --system --add safe.directory /var/www/html
 
 # Utilisateur non-root aligné sur l'UID/GID de l'hôte (fichiers du volume)
-ARG USER_ID=1000
-ARG GROUP_ID=1000
+ARG USER_ID=1001
+ARG GROUP_ID=1001
 RUN groupadd -o -g ${GROUP_ID} app \
     && useradd -o -m -u ${USER_ID} -g ${GROUP_ID} -s /bin/bash app
 

@@ -14,8 +14,8 @@ services:
       dockerfile: ./docker/Dockerfile
       target: php
       args:
-        USER_ID: ${USER_ID:-1000}
-        GROUP_ID: ${GROUP_ID:-1000}
+        USER_ID: ${USER_ID:-1001}
+        GROUP_ID: ${GROUP_ID:-1001}
     working_dir: /var/www/html
     command: symfony serve --listen-ip=0.0.0.0 --no-tls
     ports:

@@ -78,3 +78,19 @@ docker compose exec php php bin/console doctrine:database:create
 docker compose exec php php bin/console doctrine:migrations:migrate --no-interaction
 docker compose exec php php bin/console doctrine:fixtures:load --no-interaction
 ```
+
+## Charger le jeu de données SQL (`docker/harmonia.sql`)
+
+Le dump ne contient que des `INSERT` : le schéma doit exister (migrations jouées) et les tables doivent être vides.
+
+- Base de données locale
+```bash
+docker compose exec -T db mariadb -uroot -proot harmonia < docker/harmonia.sql
+```
+
+- Base de données test
+```bash
+docker compose exec php php bin/console doctrine:database:create --if-not-exists --env=test
+docker compose exec php php bin/console doctrine:migrations:migrate --no-interaction --env=test
+docker compose exec -T db mariadb -uroot -proot harmonia_test < docker/harmonia.sql
+```
