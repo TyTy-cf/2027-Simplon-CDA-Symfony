@@ -2,14 +2,14 @@
 
 namespace App\Tests\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use App\Tests\AbstractWebTestCase;
 
-class ArtistControllerTest extends WebTestCase
+class ArtistControllerTest extends AbstractWebTestCase
 {
     public function testSomething(): void
     {
         $client = static::createClient();
-        $client->request('GET', '/artiste');
+        $client->request('GET', self::URL_ARTIST);
 
         $this->assertResponseIsSuccessful();
         $this->assertSelectorTextContains('h1', 'Artistes');

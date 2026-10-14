@@ -2,15 +2,15 @@
 
 namespace App\Tests\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use App\Tests\AbstractWebTestCase;
 
-class HomeControllerTest extends WebTestCase
+class HomeControllerTest extends AbstractWebTestCase
 {
 
     public function testAccessOK(): void
     {
         $client = static::createClient();
-        $client->request('GET', '/');
+        $client->request('GET', self::URL_HOME);
 
         $this->assertResponseIsSuccessful();
         $this->assertSelectorTextContains('h1', 'Les dernières sorties');
