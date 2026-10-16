@@ -19,6 +19,7 @@ abstract class AbstractWebTestCase extends WebTestCase
     const string URL_PROFILE = '/profil';
     const string URL_REGISTER = '/register';
     const string URL_TRACK = '/trackAdd/206';
+    const string URL_GENRE = '/genre/22';
 
     protected function loginUser(
         KernelBrowser $client,

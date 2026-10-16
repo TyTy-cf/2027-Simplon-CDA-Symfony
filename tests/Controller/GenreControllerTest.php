@@ -2,16 +2,16 @@
 
 namespace App\Tests\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use App\Tests\AbstractWebTestCase;
 
-class GenreControllerTest extends WebTestCase
+class GenreControllerTest extends AbstractWebTestCase
 {
-    public function testSomething(): void
+    public function testAccessOK(): void
     {
         $client = static::createClient();
-        $crawler = $client->request('GET', '/');
+        $client->request('GET', self::URL_GENRE);
 
         $this->assertResponseIsSuccessful();
-        $this->assertSelectorTextContains('h1', 'Hello World');
+        $this->assertSelectorTextContains('h1', 'Blues');
     }
 }

@@ -27,9 +27,9 @@ class TrackControllerTest extends AbstractWebTestCase
         $this->assertSelectorExists('button[name="track[submit]"]');
     }
 
-    #[TestWith(['Mon premier titre', 215, 1])]
-    #[TestWith(['Intro', 62, 2])]
-    #[TestWith(['Outro - Remix', 340, 10])]
+    #[TestWith(['Mon premier titre2', 215, 3])]
+    #[TestWith(['Intro2', 62, 4])]
+    #[TestWith(['Outro - Remix2', 340, 5])]
     public function testAddTrack(string $title, int $duration, int $number): void
     {
         $client = static::createClient();
