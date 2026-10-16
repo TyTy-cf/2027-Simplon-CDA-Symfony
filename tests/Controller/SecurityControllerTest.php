@@ -51,6 +51,17 @@ class SecurityControllerTest extends AbstractWebTestCase
         $form['password'] = $password;
         $client->submit($form);
 
+        // Exemple avec la fonction condensée
+        $this->fillAndSendForm(
+            $client,
+            $crawler,
+            'Se connecter',
+            [
+                'email' => $email,
+                'password' => $password,
+            ]
+        );
+
         $this->assertResponseRedirects($path);
 
         if ($path === self::URL_LOGIN) {
