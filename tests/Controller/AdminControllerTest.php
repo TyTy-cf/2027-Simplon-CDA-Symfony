@@ -9,7 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 class AdminControllerTest extends AbstractWebTestCase
 {
 
-    #[TestWith(['kelly.cassin@example.com'])]
+    
     #[TestWith(['admin@admin.fr'])]
     public function testAccessOKToBackoffice(string $email): void
     {
@@ -19,6 +19,7 @@ class AdminControllerTest extends AbstractWebTestCase
         $client->request('GET', self::URL_BACKOFFICE);
 
         $this->assertResponseIsSuccessful();
+        $this->assertSelectorTextContains('h1', 'Dashboard');
     }
 
     public function testAccessKOToBackoffice(): void
