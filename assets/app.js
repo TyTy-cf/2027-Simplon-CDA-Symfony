@@ -9,7 +9,7 @@ import './styles/app.css';
 
 import './ajax-test.js';
 import './search-test.js';
-import './navbar-test.js';
+
 
 let button = document.getElementById("buttonFav");
 let buttonListen = document.getElementById("buttonList");

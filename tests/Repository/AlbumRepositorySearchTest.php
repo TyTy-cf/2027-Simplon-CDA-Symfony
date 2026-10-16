@@ -1,0 +1,46 @@
+<?php
+
+namespace App\Tests;
+
+use App\Repository\AlbumRepository;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use PHPUnit\Framework\Attributes\TestWith;
+
+class AlbumRepositorySearchTest extends KernelTestCase
+{
+    private AlbumRepository $repository;
+
+    protected function setUp(): void
+    {
+        self::bootKernel();
+        $this->repository = static::getContainer()->get(AlbumRepository::class);
+    }
+
+    public function testSearchReturnsAlbumsContainingTerm(): void
+    {
+        $albums = $this->repository->search('ride');
+        $this->assertNotEmpty($albums);
+
+        foreach ($albums as $album) {
+            $this->assertStringContainsStringIgnoringCase('ride', $album->getTitle());
+        }
+    }
+
+    #[TestWith(['ride'])]
+    #[TestWith(['RIDE'])]
+    #[TestWith(['on'])]
+    public function testSearchMatchesAnywhereInTitle(string $term): void
+    {
+        $albums = $this->repository->search($term);
+
+        foreach ($albums as $album) {
+            $this->assertStringContainsStringIgnoringCase($term, $album->getTitle());
+        }
+    }
+    public function testSearchReturnsEmptyArrayWhenNoMatch(): void
+    {
+        $albums = $this->repository->search('zzzzzzzzzz');
+
+        $this->assertSame([], $albums);
+    }
+}

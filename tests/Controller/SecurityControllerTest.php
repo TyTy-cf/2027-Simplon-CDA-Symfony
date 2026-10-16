@@ -70,4 +70,13 @@ class SecurityControllerTest extends AbstractWebTestCase
         $this->assertSelectorExists('a[href="/logout"]');
     }
 
+    public function testLogoutExistsAsLoggedAdmin(): void
+    {
+        $client = static::createClient();
+        $this->loginUser($client, 'admin@admin.fr');
+        $client->request('GET', self::URL_LOGIN);
+
+        $this->assertSelectorExists('a[href="/logout"]');
+    }
+
 }

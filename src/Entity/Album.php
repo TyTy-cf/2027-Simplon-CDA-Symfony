@@ -34,7 +34,6 @@ class Album
     private ?string $type = null;
 
     #[ORM\Column]
-    #[Groups(['album:read'])]
     private ?\DateTimeImmutable $createdAt = null;
 
     /**
