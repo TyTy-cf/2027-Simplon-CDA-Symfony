@@ -4,6 +4,8 @@ namespace App\Tests\Repository;
 use App\Repository\GenreRepository;
 use App\Entity\Genre;
 use Doctrine\ORM\EntityManagerInterface;
+use PHPUnit\Framework\Attributes\TestWith;
+
 
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
@@ -15,14 +17,22 @@ class GenreRepositoryTest extends KernelTestCase
         self::bootKernel();
         $this->em= static::getContainer()->get(EntityManagerInterface::class);
     }
-    public function testSomething(): void
+
+    #[TestWith(['Pop', true])]
+    #[TestWith(['toto', false])]
+    public function testGenre(string $genreName, bool $isTestOk): void
     {
         
 
-        $genres= $this->em->getRepository(Genre::class)->findByNameLike('Pop');
-        //dump($genres); array of genre which caontains "Pop"
+        $genres= $this->em->getRepository(Genre::class)->findByNameLike($genreName);
+        //dump($genres); array of genre which caontains $genreName
 
-        $this->assertNotEmpty($genres);
+        if ($isTestOk) {
+            $this->assertNotEmpty($genres);
+        } else {
+           $this->assertEmpty($genres); 
+        }
+        
 
         
     }
