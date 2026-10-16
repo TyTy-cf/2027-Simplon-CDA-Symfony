@@ -1,6 +1,7 @@
 import './stimulus_bootstrap.js';
 import './ajax-test.js';
 import './research-test.js';
+import './navbargenre-test.js';
 /*
  * Welcome to your app's main JavaScript file!
  *
