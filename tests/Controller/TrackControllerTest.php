@@ -2,16 +2,16 @@
 
 namespace App\Tests\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use App\Tests\AbstractWebTestCase;
 
-class TrackControllerTest extends WebTestCase
+class TrackControllerTest extends AbstractWebTestCase
 {
-    public function testSomething(): void
+    public function testAccessOK(): void
     {
         $client = static::createClient();
-        $crawler = $client->request('GET', '/');
+        $client->request('GET', self::URL_TRACK);
 
         $this->assertResponseIsSuccessful();
-        $this->assertSelectorTextContains('h1', 'Hello World');
+        $this->assertSelectorTextContains('h1', 'Buckridge Willie');
     }
 }
