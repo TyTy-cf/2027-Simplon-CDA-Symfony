@@ -4,6 +4,7 @@ namespace App\Tests\Repository;
 
 use App\Repository\AlbumRepository;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use PHPUnit\Framework\Attributes\TestWith;
 
 class AlbumRepositoryTest extends KernelTestCase
 {
@@ -54,5 +55,22 @@ class AlbumRepositoryTest extends KernelTestCase
         }
 
         return $titles;
+    }
+
+    #[TestWith(['ep'])]
+    #[TestWith(['single'])]
+    #[TestWith(['album'])]
+
+    /* TEST DU BON TYPE D'ALBUM ET DU BON NOMBRE */
+    public function testFindType(string $type): void
+    {
+        self::bootKernel();
+        $albums = static::getContainer()->get(AlbumRepository::class)->findWithRelations($type, 12);
+
+        $this->assertNotEmpty($albums);
+        $this->assertLessThanOrEqual(12, count($albums));
+        foreach ($albums as $album) {
+            $this->assertSame($type, strtolower($album->getType()));
+        }
     }
 }

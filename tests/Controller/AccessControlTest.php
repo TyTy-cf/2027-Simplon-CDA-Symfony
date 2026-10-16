@@ -11,7 +11,9 @@ class AccessControlTest extends AbstractWebTestCase
     #[TestWith(['/playlistCreate'])]
     #[TestWith(['/favorite/1'])]
     #[TestWith(['/history/1'])]
-    public function testAnonymousIsRedirectedToLogin(string $url): void
+
+    /*UN NON CONNECTÉ EST REDIRIGÉ AU LOGIN */
+    public function testAnonymousRedirectLogin(string $url): void
     {
         $client = static::createClient();
         $client->request('GET', $url);
@@ -25,7 +27,8 @@ class AccessControlTest extends AbstractWebTestCase
     #[TestWith(['/admin/artiste/39'])]
     #[TestWith(['/admin/artiste/new'])]
     #[TestWith(['/admin/artiste/39/edit'])]
-    public function testAnonymousIsRedirectedToLoginOnAdminRoutes(string $url): void
+    /*TEST DE LA REDIRECTION POUR LES VOIES ADMIN*/
+    public function testAnonymousDontGoOnAdminRoutes(string $url): void
     {
         $client = static::createClient();
         $client->request('GET', $url);

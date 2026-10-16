@@ -10,13 +10,16 @@ use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 class AuthTest extends KernelTestCase
 {
+    /*DROITS ADMIN POUR L'ADMIN */
 
-    public function testAdminIsGrantedAdminRole(): void
+    public function testAdminHasIsRole(): void
     {
         $this->assertTrue($this->isGrantedAs('admin@admin.fr', 'ROLE_ADMIN'));
     }
 
-    public function testSimpleUserIsNotGrantedAdminRole(): void
+    /* UN UTILISATEUR LAMBDA N'A PAS LES DROITS ADMIN */
+
+    public function testSimpleUserDontHaveAdminRole(): void
     {
         $this->assertFalse($this->isGrantedAs('kelly.cassin@example.com', 'ROLE_ADMIN'));
     }
