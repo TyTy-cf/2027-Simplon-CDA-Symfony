@@ -12,7 +12,7 @@ class AuthTest extends KernelTestCase
 {
     /*DROITS ADMIN POUR L'ADMIN */
 
-    public function testAdminHasIsRole(): void
+    public function testAdminHasHisRole(): void
     {
         $this->assertTrue($this->isGrantedAs('admin@admin.fr', 'ROLE_ADMIN'));
     }
