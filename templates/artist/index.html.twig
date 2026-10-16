@@ -5,6 +5,9 @@
 {% block body %}
     <div class="container">
         <h1>Artistes</h1>
+        <div class="navigation">
+            {{ knp_pagination_render(artists) }}
+        </div>
         <div class="row">
             {% for artist in artists %}
                 <div class="col-3 mb-2">

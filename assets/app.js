@@ -6,6 +6,8 @@ import './stimulus_bootstrap.js';
  * which should already be in your base.html.twig.
  */
 import './styles/app.css';
+import './ajax-test.js';
+import './searchBar.js';
 
 let button = document.getElementById("buttonFav");
 let buttonListen = document.getElementById("buttonList");
