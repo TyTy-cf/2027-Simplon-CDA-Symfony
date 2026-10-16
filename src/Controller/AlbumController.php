@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Repository\AlbumRepository;
 use App\Repository\TrackRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
@@ -28,4 +29,14 @@ final class AlbumController extends AbstractController
             'duration' => $duration
         ]);
     }
+
+   
+
+#[Route('/ajax/search-albums', name: 'app_ajax_search_albums')]
+public function searchAlbums(Request $request, AlbumRepository $albumRepository): Response
+{
+    $albums = $albumRepository->search($request->query->getString('search'));
+
+    return $this->json(['albums' => $albums], 200, [], ['groups' => ['album:read']]);
+}
 }

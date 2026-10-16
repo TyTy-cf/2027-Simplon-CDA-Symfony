@@ -13,7 +13,7 @@
                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         Genres
                     </a>
-                    <ul class="dropdown-menu">
+                    <ul class="dropdown-menu" id="navbarDropdownGenre">
                         {% for genre in get_genres() %}
                             <li><a class="dropdown-item" href="{{ path("app_genre", {"id": genre.id}) }}">{{ genre.name }}</a></li>
                         {% endfor %}

@@ -16,6 +16,15 @@ class GenreRepository extends ServiceEntityRepository
         parent::__construct($registry, Genre::class);
     }
 
+    public function findByNameLike(string $name)
+    {
+        return $this->createQueryBuilder('g')
+        ->where('g.name LIKE :name')
+        ->setParameter('name', '%'. $name .'%')
+        ->getQuery()
+        ->getResult();
+    }
+
 //    /**
 //     * @return Genre[] Returns an array of Genre objects
 //     */

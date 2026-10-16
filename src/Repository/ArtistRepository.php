@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Artist;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -16,6 +17,10 @@ class ArtistRepository extends ServiceEntityRepository
         parent::__construct($registry, Artist::class);
     }
 
+    public function getAll(): QueryBuilder {
+
+    return $this->createQueryBuilder('a');
+    }
 //    /**
 //     * @return Artist[] Returns an array of Artist objects
 //     */
