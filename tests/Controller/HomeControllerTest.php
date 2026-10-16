@@ -16,4 +16,13 @@ class HomeControllerTest extends AbstractWebTestCase
         $this->assertSelectorTextContains('h1', 'Les dernières sorties');
     }
 
+
+    public function testNavBar():void
+    {
+        $client = static::createClient();
+        $crawler = $client->request('GET', self::URL_HOME);
+        $navGenre = $crawler->filter('.navbar-nav');
+        dump($navGenre);
+        $this->assertResponseIsSuccessful();
+    }
 }

@@ -31,4 +31,11 @@ abstract class AbstractWebTestCase extends WebTestCase
         return $this->getContainer()->get($repoClass);
     }
 
+    protected function removeEntity(?object $object):void{
+        if($object !== null){
+            $em = $this->getContainer()->get('doctrine.orm.entity_manager');
+            $em->remove($object);
+            $em->flush();
+        }
+    }
 }

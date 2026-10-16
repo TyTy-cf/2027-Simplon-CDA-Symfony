@@ -20,15 +20,19 @@ class RegistrationControllerTest extends AbstractWebTestCase
     }
 
 
-    #[TestWith(['oskour@oskour.fr','oskour','oskour',302])]
-    #[TestWith(['oskour@oskour.fr','','',422])]
-    #[TestWith(['oskour@oskour.fr','oskour','',422])]
-    #[TestWith(['oskour@oskour.fr','oskour','jpp',422])]
+    #[TestWith(['oskour@oskour.fr','oskour','oskour',302, null])]
+    #[TestWith(['oskouroskour.fr','oskour','oskour',422, 'Vous devez saisir un email'])]
+    #[TestWith(['oskour@oskour.fr','','',422,'This value should not be blank.'])]
+    #[TestWith(['oskour@oskour.fr','oskour','',422,'Les deux champs doivent être identiques.'])]
+    #[TestWith(['','oskour','oskour',422,"L'email doit avoir une valeur"])]
+    #[TestWith(['oskour@oskour.fr','oskour','jpp',422,'Les deux champs doivent être identiques.'])]
+    #[TestWith(['kelly.cassin@example.com','oskour','oskour',422,'There is already an account with this email'])]
     public function testFormSubmit(
         string $email,
         string $password1,
         string $password2,
-        int  $code
+        int  $code,
+        ?string $msg
     ): void
     {
         $client = static::createClient();
@@ -42,24 +46,14 @@ class RegistrationControllerTest extends AbstractWebTestCase
 
         $this->assertResponseStatusCodeSame($code);
 
-        if ($code === 422 && $password2!="" && $password1!="" && $email!=null) {
-            $this->assertSelectorTextContains('div.invalid-feedback.d-block', 'Les deux champs doivent être identiques.');
-        }
-
-        if ($code === 422 && $password1 === "" && $email!=null) {
-            $this->assertSelectorTextContains('div.invalid-feedback.d-block', 'This value should not be blank.');
-        }
-
-        if ($code === 422 && $email === "") {
-            $this->assertSelectorTextContains('div.invalid-feedback.d-block', "L'email doit avoir une valeur");
+        if($msg !== null){
+            $this->assertSelectorTextContains('div.invalid-feedback.d-block', $msg);
         }
 
         $userRepo = $this->getRepository(UserRepository::class);
         $user = $userRepo->findOneBy(["email"=>$email]);
-        if($user != null){
-            $em = $this->getContainer()->get('doctrine.orm.entity_manager');
-            $em->remove($user);
-            $em->flush();
+        if($code === 302){
+            $this->removeEntity($user);
         }
     }
 }

@@ -8,6 +8,8 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Serializer\Attribute\Groups;
+
 
 #[ORM\Entity(repositoryClass: ArtistRepository::class)]
 class Artist
@@ -15,9 +17,11 @@ class Artist
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['album:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['album:read'])]
     #[Assert\NotBlank(message: 'Le nom de scène doit avoir une valeur')]
     private ?string $stageName = null;
 
