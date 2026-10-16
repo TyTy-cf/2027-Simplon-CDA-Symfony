@@ -27,7 +27,7 @@ class AlbumRepositoryTest extends KernelTestCase
     /* AUCUN RÉSULTAT QUAND IL Y A RIEN QUI CORRESPOND */
     public function testSearchByTitleNoResults(): void
     {
-        $titles = $this->searchTitles('zzzzzz');
+        $titles = $this->searchTitles('Son inexistant');
 
         $this->assertSame([], $titles);
     }
