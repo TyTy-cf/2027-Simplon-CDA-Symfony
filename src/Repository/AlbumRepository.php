@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Album;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -14,6 +15,16 @@ class AlbumRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Album::class);
+    }
+
+    public function findAlbumsLike(string $search): array
+    {
+        $search = str_replace(' ', '%', $search);
+        return $this->createQueryBuilder('a')
+            ->where('a.title LIKE :search')
+            ->setParameter('search', '%' . $search . '%')
+            ->getQuery()
+            ->getResult();
     }
 
     public function findWithRelations(string $type, ?int $limit = null): array

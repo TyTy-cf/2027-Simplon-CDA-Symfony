@@ -17,6 +17,7 @@ abstract class AbstractWebTestCase extends WebTestCase
     const string URL_FAVORITE = '/favoris';
     const string URL_ARTIST = '/artiste';
     const string URL_ALBUM = '/album';
+    const string URL_ADMIN_ALBUM_NEW = '/admin/album/new';
     const string URL_PROFILE = '/profil';
 
     protected function loginUser(
@@ -25,7 +26,10 @@ abstract class AbstractWebTestCase extends WebTestCase
     ): void
     {
         $userRepo = $this->getRepository(UserRepository::class);
-        $client->loginUser($userRepo->findOneBy(['email' => $email]));
+        $user = $userRepo->findOneBy(['email' => $email]);
+        if ($user !== null) {
+            $client->loginUser($user);
+        }
     }
 
     protected function getRepository(string $repoClass): ServiceEntityRepository {
