@@ -16,6 +16,15 @@ class AlbumRepository extends ServiceEntityRepository
         parent::__construct($registry, Album::class);
     }
 
+    public function findByNameLike(string $input)
+    {
+        return $this->createQueryBuilder('a')
+            ->where('a.title LIKE :input')
+            ->setParameter('input', '%' . $input . '%')
+            ->getQuery()
+            ->getResult();
+    }
+
     public function findWithRelations(string $type, ?int $limit = null): array
     {
         // SELECT a.* FROM album AS a
@@ -41,5 +50,4 @@ class AlbumRepository extends ServiceEntityRepository
         return $qb->getQuery()
             ->getResult(); // $pdo->execute($statement);
     }
-
 }

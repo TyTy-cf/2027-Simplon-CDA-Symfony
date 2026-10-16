@@ -5,6 +5,14 @@
 {% block body %}
     <div class="container">
 
+        <button id="btn-ajax-2">Bouton test Ajax2</button>
+        <button id="btn-ajax-3">Bouton test Pokemon</button>
+        <div id="search-container">
+            <input type="text" id="input-recherche" placeholder="rechercher un album">
+            <div id="search-content">
+            </div>
+        </div>
+
         <h1 class="text-center">Les dernières sorties</h1>
 
         {% include "components/album-loop.html.twig" with {
