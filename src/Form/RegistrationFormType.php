@@ -37,6 +37,15 @@ class RegistrationFormType extends AbstractType
             ->add('plainPassword', RepeatedType::class, [
                 'type' => PasswordType::class,
                 'mapped' => false,
+                'constraints' => [
+                    new NotBlank(message: "Le mot de passe doit etre rempli."),
+                    new Length(
+                        min: 6,
+                        max: 40,
+                        minMessage: "Le mot de passe doit contenir au moins {{ limit }} caractères.",
+                        maxMessage: "Le mot de passe ne peut pas dépasser {{ limit }} caractères."
+                    )
+                ],
                 'invalid_message' => 'Les deux champs doivent être identiques.',
                 'required' => true,
                 'first_options' => [

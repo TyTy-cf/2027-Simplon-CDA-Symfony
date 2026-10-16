@@ -37,8 +37,7 @@ class SecurityControllerTest extends AbstractWebTestCase
         string $email,
         string $password,
         string $path
-    ): void
-    {
+    ): void {
         $client = static::createClient();
         // $crawler => DOM / Page HTML
         $crawler = $client->request('GET', self::URL_LOGIN);
@@ -47,7 +46,7 @@ class SecurityControllerTest extends AbstractWebTestCase
         // si le button est bien enfant de la balise form /!\
         $form = $crawler->selectButton('Se connecter')->form();
         // Cas alternatif :
-//        $form = $crawler->filter('form[name="form[login]"]')->form();
+        //        $form = $crawler->filter('form[name="form[login]"]')->form();
         $form['email'] = $email;
         $form['password'] = $password;
         $client->submit($form);
@@ -69,5 +68,4 @@ class SecurityControllerTest extends AbstractWebTestCase
 
         $this->assertSelectorExists('a[href="/logout"]');
     }
-
 }
