@@ -44,7 +44,7 @@ class AlbumRepository extends ServiceEntityRepository
 
 
    public function search(string $term): array
-{
+{   $term = str_replace('', '%', $term);
     return $this->createQueryBuilder('a')
         ->where('a.title LIKE :term')
         ->setParameter('term', '%' . $term . '%')

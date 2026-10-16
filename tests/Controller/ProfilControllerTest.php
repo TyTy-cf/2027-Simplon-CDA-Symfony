@@ -35,5 +35,17 @@ class ProfilControllerTest extends AbstractWebTestCase
 
         $this->assertResponseRedirects(self::URL_LOGIN);
     }
+    
+    #[TestWith(['admin@admin.fr'])]
 
+    public function testAccessOkToAdmin(string $email): void
+    {
+        $client = static::createClient();
+        $this->loginUser($client, $email);
+
+        $client->request('GET', self::URL_ADMIN);
+
+        $this->assertResponseIsSuccessful();
+        $this->assertSelectorTextContains('h1', 'Dashboard');
+    }
 }
