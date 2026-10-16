@@ -39,9 +39,12 @@ class RegistrationControllerTest extends AbstractWebTestCase
     #[TestWith(['totozero.fr', '123', '123', 422, 'L\'email doit être valide'])]
     #[TestWith(['kelly.cassin@example.com', '123', '123', 422, 'There is already an account with this email'])]
     public function testFormSubmit(
-        string $email, string $password1, string $password2, int $code, ?string $msg
-    ): void
-    {
+        string $email,
+        string $password1,
+        string $password2,
+        int $code,
+        ?string $msg
+    ): void {
         $client = static::createClient();
         $crawler = $client->request('GET', self::URL_REGISTER);
 

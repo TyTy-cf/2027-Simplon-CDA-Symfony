@@ -42,4 +42,14 @@ class AlbumRepository extends ServiceEntityRepository
             ->getResult(); // $pdo->execute($statement);
     }
 
+    public function findByTitleLike(string $search)
+    {
+        $this->createQueryBuilder('a')
+            ->where('a.title LIKE :search')
+            ->setParameter('search', '%' . $search . '%')
+            ->getQuery()
+            ->getResult();
+
+    }
+
 }

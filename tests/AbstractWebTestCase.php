@@ -18,17 +18,19 @@ abstract class AbstractWebTestCase extends WebTestCase
     const string URL_ARTIST = '/artiste';
     const string URL_ALBUM = '/album';
     const string URL_PROFILE = '/profil';
+    const string URL_ADMIN = '/admin';
+    const string URL_ADMIN_ALBUM = '/admin/album/new';
 
     protected function loginUser(
         KernelBrowser $client,
-        string        $email
-    ): void
-    {
+        string $email
+    ): void {
         $userRepo = $this->getRepository(UserRepository::class);
         $client->loginUser($userRepo->findOneBy(['email' => $email]));
     }
 
-    protected function getRepository(string $repoClass): ServiceEntityRepository {
+    protected function getRepository(string $repoClass): ServiceEntityRepository
+    {
         return $this->getContainer()->get($repoClass);
     }
 

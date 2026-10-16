@@ -6,6 +6,8 @@ use App\Repository\AlbumRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Attribute\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: AlbumRepository::class)]
 class Album
@@ -13,18 +15,27 @@ class Album
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['album:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['album:read'])]
+    #[Assert\NotBlank(message: 'L\'album doit avoir un titre')]
     private ?string $title = null;
 
     #[ORM\Column]
+    #[Groups(['album:read'])]
+    #[Assert\NotBlank(message: 'La date doit avoir une valeur')]
     private ?\DateTimeImmutable $releasedAt = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['album:read'])]
+    #[Assert\NotBlank(message: 'L\'album doit avoir une pochette')]
     private ?string $poster = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['album:read'])]
+    #[Assert\NotBlank(message: 'L\'album doit avoir un type')]
     private ?string $type = null;
 
     #[ORM\Column]
@@ -37,6 +48,7 @@ class Album
     private Collection $tracks;
 
     #[ORM\ManyToOne(inversedBy: 'albums')]
+    #[Groups(['album:read'])]
     private ?Artist $artist = null;
 
     public function __construct()

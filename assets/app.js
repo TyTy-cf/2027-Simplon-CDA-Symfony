@@ -1,4 +1,6 @@
 import './stimulus_bootstrap.js';
+import './ajax-test.js';
+import './search-album.js';
 /*
  * Welcome to your app's main JavaScript file!
  *
@@ -10,58 +12,58 @@ import './styles/app.css';
 let button = document.getElementById("buttonFav");
 let buttonListen = document.getElementById("buttonList");
 let id;
-if(button){
+if (button) {
     id = button.dataset.trackId;
     checkFav();
 
-button.addEventListener("click", (e)=>{
-    fav();
-});
+    button.addEventListener("click", (e) => {
+        fav();
+    });
 }
 
-if(buttonListen){
+if (buttonListen) {
     id = buttonListen.dataset.trackId;
-    buttonListen.addEventListener("click", ()=>{
+    buttonListen.addEventListener("click", () => {
         listen();
     })
 }
 
-async function listen(){
+async function listen() {
     try {
         const res = await fetch(`/history/${id}`);
-        if (!res.ok){
+        if (!res.ok) {
             throw new Error(res.status);
         }
         const result = await res.json();
         result.listened && (buttonListen.innerText = "Listening ...");
-        setTimeout(()=>{buttonListen.innerText = "Listen";},buttonListen.dataset.trackDur*1000)
-    } catch (error){
+        setTimeout(() => { buttonListen.innerText = "Listen"; }, buttonListen.dataset.trackDur * 1000)
+    } catch (error) {
         console.error(error.message);
     }
 }
 
-async function checkFav(){
+async function checkFav() {
     try {
         const res = await fetch(`/favoriteCheck/${id}`);
-        if (!res.ok){
+        if (!res.ok) {
             throw new Error(res.status);
         }
         const result = await res.json();
-        result.fav?button.innerText = "Unfav":button.innerText = "fav"
-    } catch (error){
+        result.fav ? button.innerText = "Unfav" : button.innerText = "fav"
+    } catch (error) {
         console.error(error.message);
     }
 }
 
-async function fav(){
+async function fav() {
     try {
         const res = await fetch(`/favorite/${id}`);
-        if (!res.ok){
+        if (!res.ok) {
             throw new Error(res.status);
         }
         const result = await res.json();
-        result.fav?button.innerText = "Unfav":button.innerText = "fav"
-    } catch (error){
+        result.fav ? button.innerText = "Unfav" : button.innerText = "fav"
+    } catch (error) {
         console.error(error.message);
     }
 }
