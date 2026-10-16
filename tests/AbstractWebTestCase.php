@@ -13,7 +13,6 @@ abstract class AbstractWebTestCase extends WebTestCase
 
     const string URL_HOME = '/';
     const string URL_LOGIN = '/login';
-    const string URL_REGISTER = '/register';
     const string URL_FAVORITE = '/favoris';
     const string URL_ARTIST = '/artiste';
     const string URL_ALBUM = '/album';
@@ -32,8 +31,6 @@ abstract class AbstractWebTestCase extends WebTestCase
     {
         return $this->getContainer()->get($repoClass);
     }
-<<<<<<< HEAD
-=======
 
     protected function removeEntity(?object $object): void
     {
@@ -52,6 +49,4 @@ abstract class AbstractWebTestCase extends WebTestCase
         }
         $client->submit($form);
     }
-
->>>>>>> main
 }
