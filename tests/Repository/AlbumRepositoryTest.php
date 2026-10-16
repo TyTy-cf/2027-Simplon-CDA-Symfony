@@ -55,5 +55,4 @@ class AlbumRepositoryTest extends KernelTestCase
 
         return $titles;
     }
-
 }

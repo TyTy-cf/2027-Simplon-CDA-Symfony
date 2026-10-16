@@ -11,7 +11,7 @@ class GenreControllerTest extends AbstractWebTestCase
     #[TestWith([12, 'Pop'])]
     #[TestWith([13, 'Jazz'])]
     #[TestWith([14, 'Rock'])]
-    /* On est bien redirigé si un genre existe et a son id */
+    /* ON EST BIEN SUR LA PAGE D'UN GENRE AVEC L'ID ET LE NOM */
     public function testAccessOK(int $genreId, string $name): void
     {
         $client = static::createClient();
@@ -21,6 +21,7 @@ class GenreControllerTest extends AbstractWebTestCase
         $this->assertSelectorTextContains('h1', $name);
     }
 
+    /* GENRE INCONNU = REDIRECTION SUR LA PAGE ALBUM */
     public function testUnknownGenreRedirectsToHome(): void
     {
         $client = static::createClient();
@@ -28,5 +29,4 @@ class GenreControllerTest extends AbstractWebTestCase
 
         $this->assertResponseRedirects(self::URL_HOME);
     }
-
 }
