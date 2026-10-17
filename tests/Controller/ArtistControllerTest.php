@@ -6,7 +6,7 @@ use App\Tests\AbstractWebTestCase;
 
 class ArtistControllerTest extends AbstractWebTestCase
 {
-    public function testSomething(): void
+    public function testAccessOk(): void
     {
         $client = static::createClient();
         $client->request('GET', self::URL_ARTIST);
