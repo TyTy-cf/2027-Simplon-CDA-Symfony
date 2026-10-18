@@ -2,11 +2,9 @@
 
 namespace App\Tests\Controller;
 
-use App\Repository\AlbumRepository;
 use App\Repository\ArtistRepository;
 use App\Tests\AbstractWebTestCase;
 use PHPUnit\Framework\Attributes\TestWith;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class AdminArtistControllerTest extends AbstractWebTestCase
 {
@@ -33,6 +31,7 @@ class AdminArtistControllerTest extends AbstractWebTestCase
         $this->assertSelectorExists('textarea[name="artist[biography]"]');
         $this->assertSelectorTextContains('button[type="submit"]', "Ajouter");
     }
+
     #[TestWith(['admin@admin.fr', 'JJG', 'France', 'biographie', 302])]
     public function testFormSubmit(
         string $email,
