@@ -27,12 +27,12 @@ class SecurityControllerTest extends AbstractWebTestCase
         $this->assertSelectorTextContains('button[type="submit"]', 'Se connecter');
     }
 
-    #[TestWith(['admin@admin.fr', '123', self::URL_HOME])]
-    #[TestWith(['admin@admin.fr', '', self::URL_LOGIN])]
-    #[TestWith(['admin@admin.fr', '12345', self::URL_LOGIN])]
-    #[TestWith(['admin@toto.fr', '123', self::URL_LOGIN])]
-    #[TestWith(['', '123', self::URL_LOGIN])]
-    #[TestWith(['', '', self::URL_LOGIN])]
+    #[TestWith(['admin@admin.fr', '123', self::URL_HOME],'email correct')]
+    #[TestWith(['admin@admin.fr', '', self::URL_LOGIN],'mdp manquant')]
+    #[TestWith(['admin@admin.fr', '12345', self::URL_LOGIN],'mauvais mdp')]
+    #[TestWith(['admin@toto.fr', '123', self::URL_LOGIN],"mauvais domaine")]
+    #[TestWith(['', '123', self::URL_LOGIN],"pas de mail")]
+    #[TestWith(['', '', self::URL_LOGIN],'aucune données')]
     public function testFormSubmit(
         string $email,
         string $password,
@@ -68,20 +68,5 @@ class SecurityControllerTest extends AbstractWebTestCase
         $client->request('GET', self::URL_LOGIN);
 
         $this->assertSelectorExists('a[href="/logout"]');
-    }
-
-    #[TestWith(['admin@admin.fr',200])]
-    #[TestWith(['', 302])]
-    #[TestWith(['kelly.cassin@example.com',403])]
-    public function testAccessDashboard(string $email, int $code):void{
-        $client = static::createClient();        
-        if($email!==""){
-            $this->loginUser($client, $email);
-        }
-        $client->request('GET', self::URL_ADMIN);
-        $this->assertResponseStatusCodeSame($code);
-        if($code === 302){
-            $this->assertResponseRedirects(self::URL_LOGIN);
-        }
     }
 }

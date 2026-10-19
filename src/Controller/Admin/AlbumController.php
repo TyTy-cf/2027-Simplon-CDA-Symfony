@@ -53,7 +53,6 @@ final class AlbumController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $album->setCreatedAt(new \DateTimeImmutable());
             $img = $form->get('poster')->getData();
-
             if ($img) {
                 $ogFilename = pathinfo($img->getClientOriginalName(), PATHINFO_FILENAME);
                 $safeFilename = $slugger->slug($ogFilename);

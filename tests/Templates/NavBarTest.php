@@ -16,6 +16,7 @@ class NavBarTest extends AbstractWebTestCase
         foreach($crawlerLi as $node){
             if($node->nodeValue<$temp){
                 $sorted = false;
+                break;
             }
             $temp = $node->nodeValue;
         }

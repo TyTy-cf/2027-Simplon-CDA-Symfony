@@ -45,6 +45,7 @@ class AlbumRepository extends ServiceEntityRepository
 
     public function findByTitleLike(string $title)
     {
+        $title = str_replace(' ', '%', $title);
         return $this->createQueryBuilder('a')
         ->andWhere('a.title LIKE :title')
         ->setParameter('title', '%'.$title.'%')

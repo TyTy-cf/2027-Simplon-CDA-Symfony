@@ -18,4 +18,13 @@ class AlbumRepositoryTest extends AbstractKernelTestCase
         $this->assertEquals(count($albums),$number);
         $this->assertEquals($albums[0]->getType(),$albumType);
     }
+
+    #[TestWith(['r', 47])]
+    #[TestWith(['Ride on time', 1])]
+    #[TestWith(['Ride on timeADPOKLZD', 0])]
+    public function testFindByTitleLike(string $search, int $number){
+        $repo = $this->getRepository(AlbumRepository::class);
+        $albums = $repo->findByTitleLike($search);
+        $this->assertEquals(count($albums),$number);
+    }
 }
