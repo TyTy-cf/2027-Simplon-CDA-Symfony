@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Attribute\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: TrackRepository::class)]
 class Track
@@ -17,12 +18,15 @@ class Track
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: 'Le champ est obligatoire')]
     private ?string $title = null;
 
     #[ORM\Column]
+    #[Assert\NotBlank(message: 'Le champ est obligatoire')]
     private ?int $duration = null;
 
     #[ORM\Column]
+    #[Assert\NotBlank(message: 'Le champ est obligatoire')]
     private ?int $number = null;
 
     #[ORM\Column]
