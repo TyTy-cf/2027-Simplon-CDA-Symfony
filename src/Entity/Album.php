@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Attribute\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: AlbumRepository::class)]
 class Album
@@ -19,15 +20,19 @@ class Album
 
     #[ORM\Column(length: 255)]
     #[Groups(['album:read'])]
+    #[Assert\NotBlank(message: 'Le champ est obligatoire')]
     private ?string $title = null;
 
     #[ORM\Column]
+    #[Assert\NotBlank(message: 'Le champ est obligatoire')]
     private ?\DateTimeImmutable $releasedAt = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: 'Le champ est obligatoire')]
     private ?string $poster = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: 'Le champ est obligatoire')]
     private ?string $type = null;
 
     #[ORM\Column]
