@@ -15,19 +15,30 @@ final class HomeController extends AbstractController
     #[Route('/', name: 'app_home')]
     public function index(AlbumRepository $albumRepository, PaginatorInterface $paginator, Request $request): Response
     {
+        $page = $request->query->getInt('page', 1);
+
         $albums = $paginator->paginate(
-            $albumRepository->findWithRelations('album', 12),
-            $request->query->getInt('page', 1),
+            $albumRepository->findWithRelations('album'),
+            $page,
             5
         );
 
-        $eps = $albumRepository->findWithRelations('ep', 12);
-        $singles = $albumRepository->findWithRelations('single', 12);
+        $eps = $paginator->paginate(
+            $albumRepository->findWithRelations('ep'),
+            $page,
+            4
+        );
+
+        $singles = $paginator->paginate(
+            $albumRepository->findWithRelations('single'),
+            $page,
+            4
+        );
 
         return $this->render('home/index.html.twig', [
-            'eps' => $eps,
+            'albums'  => $albums,
+            'eps'     => $eps,
             'singles' => $singles,
-            'albums' => $albums, // l'objet paginé, pas le tableau brut
         ]);
     }
 }
