@@ -19,6 +19,7 @@ abstract class AbstractWebTestCase extends WebTestCase
     const string URL_ALBUM = '/album';
     const string URL_PROFILE = '/profil';
     const string URL_BACKOFFICE = '/admin';
+    const string URL_ADMIN_ALBUM_NEW = '/admin/album/new';
 
     protected function loginUser(
         KernelBrowser $client,

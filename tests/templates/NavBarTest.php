@@ -70,7 +70,7 @@ class NavBarTest extends AbstractWebTestCase
 
         // Cherche dans le crawler (DOM) les enfants de type <li> d'un élément avec la classe '.navbar-nav'
         // Il s'agit du dropdown des genres dans la navbar
-        $crawlerGenres = $crawler->filter('.navbar-nav li');
+        $crawlerGenres = $crawler->filter('.dropdown-menu li');
 
         // Test : si le nb total de genres ($crawlerGenres ->count()) est supérieur à 0.
         // S'il n'est pas suéprieur à 0, c'est qu'aucun genre n'a été trouvé DONC que la liste du dropdown est vide.
@@ -103,27 +103,11 @@ class NavBarTest extends AbstractWebTestCase
             }
         }
 
-        $this->assertTrue($isSorted);
+        // $this->assertTrue($isSorted);
 
-        // $this->assertTrue(
-        //     $isSorted,
-        //     sprintf(
-        //         'Les genres ne sont pas triés par ordre alphabétique. Ordre reçu : %s',
-        //         implode(', ', $genres)
-        //     )
-        // );
+        $this->assertTrue(
+            $isSorted,
+            'Ordre reçu : ' . implode(' | ', $genres)
+        );
     }
-
-
-    // créer isTestOk = true;
-    // créer variable temporaire ; $tmpElement = $genres[0]
-    // boucler sur les éléments (Genre) as element
-    // si element !== $tmpElement, alors
-    // si element supérieur à tmpElement
-    // mettre à jour tmpElement avec la valeur de element
-    // sinon
-    // erreur : isTestOk = false
-    // finsi
-    // finboucle
-
 }

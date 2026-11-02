@@ -66,7 +66,7 @@ class AlbumControllerTest extends AbstractWebTestCase
         // - type MIME
         // - taille annoncée en octets
         $image = new UploadedFile(
-            'public/uploads/test.jpg',
+            'public/uploads/1.jpg',
             'test.jpg',
             'image/jpeg',
             1949

@@ -4,16 +4,19 @@ namespace App\Tests\Repository;
 
 use App\Entity\Album;
 use App\Repository\AlbumRepository;
+use DateTimeImmutable;
+use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\Attributes\TestWith;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class AlbumRepositoryTest extends KernelTestCase
 {
+    private EntityManagerInterface $entityManager;
     private AlbumRepository $repository;
 
     protected function setUp(): void {
         // Démarre le kernel Symfony dans l’environnement de test.
-        // Nécessaire pour disposer d’une connexion Doctrine fonctionnelle. [43][46]
+        // Nécessaire pour disposer d’une connexion Doctrine fonctionnelle.
         self::bootKernel();
 
         // Récupère le repository Album depuis le conteneur de services.
@@ -48,14 +51,16 @@ class AlbumRepositoryTest extends KernelTestCase
     #[TestWith(['ride'])]
     #[TestWith(['RIDE'])]
     #[TestWith(['on'])]
-    public function testSearchMatchesAnywhereInTitle(string $term): void {
-        $albums = $this->repository->search($term);
-        // $albums = $this->repository->findAlbumsLike($term);
+    public function testSearchMatchesAnywhereInTitle(string $input): void {
+        $albums = $this->repository->search($input);
+        // $albums = $this->$entityManager
+            // ->getRepository(Album::class)
+            // ->findByNameLike($input);
         
         $this->assertNotEmpty($albums);
 
         foreach ($albums as $album) {
-            $this->assertStringContainsStringIgnoringCase($term, $album->getTitle());
+            $this->assertStringContainsStringIgnoringCase($input, $album->getTitle());
         }
     }
     public function testSearchReturnsEmptyArrayWhenNoMatch(): void {
@@ -85,13 +90,18 @@ class AlbumRepositoryTest extends KernelTestCase
 
         $album = new Album();
         $album->setTitle('ZZZ Test Album');
+        $album->setReleasedAt(new DateTimeImmutable('2021-01-01'));
+        $album->setPoster("uploads/1.jpg");
+        $album->setType('ep');
+        $album->setCreatedAt(new DateTimeImmutable('2020-01-01'));
+
         // Ajoute ici artist, type, releasedAt, etc., selon les contraintes de ton entité.
 
         $entityManager->persist($album);
         $entityManager->flush();
 
         try {
-            $results = $this->repository->findAlbumsLike('ZZZ Test');
+            $results = $this->repository->search('ZZZ Test');
 
             $this->assertNotEmpty($results);
             $this->assertStringContainsStringIgnoringCase(
