@@ -5,6 +5,23 @@
 {% block body %}
     <div class="container">
 
+        <button id="btn-ajax-2">Boutton pour tester l'ajax 2</button>
+
+        <button id="btn-pokemon">Boutton Pokemon</button>
+
+        <div data-search-album-container>
+            <div>
+                <input type="text" id="input-search-bar"/>
+            </div>
+            <div data-search-album-result>
+
+            </div>
+        </div>
+
+{#        <form name="myform" id="input-search-form" method="get">#}
+{#            <input type="text" name="search" id="input-search-bar" value="{{ app.request.query.get('search') }}" />#}
+{#        </form>#}
+
         <h1 class="text-center">Les dernières sorties</h1>
 
         {% include "components/album-loop.html.twig" with {
