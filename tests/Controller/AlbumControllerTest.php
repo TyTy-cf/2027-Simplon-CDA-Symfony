@@ -38,6 +38,16 @@ class AlbumControllerTest extends AbstractWebTestCase
         $this->assertSelectorTextContains('h1', 'Ajouter un album');
     }
 
+    public function testAddAlbumPageAccessForbidden(): void
+    {
+        $client = static::createClient();
+        $this->loginUser($client, 'kelly.cassin@example.com');
+
+        $client->request('GET', self::URL_ADMIN_ADD_ALBUM);
+
+        $this->assertResponseStatusCodeSame(403);
+    }
+
     public function testFormExist(): void
     {
 
