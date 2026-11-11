@@ -9,10 +9,9 @@ class AlbumControllerTest extends AbstractWebTestCase
 {
 
 
-    #[TestWith([109, 'S16 - 01:29:43', 'single'])]
-    #[TestWith([206, 'Temporibus quaerat. - 01:24:22', 'EP'])]
-    #[TestWith([135, 'Occaecati quas. - 01:05:51', 'album'])]
-    #[TestWith([218, 'Oui oui - 00:00:00', 'single'])]
+    #[TestWith([6, 'The Essentials - 01:56:08', 'single'])]
+    #[TestWith([9, 'Beatae hic. - 01:02:22', 'EP'])]
+    #[TestWith([7, 'Radio - 01:23:27', 'album'])]
     public function testAccessOK(int $albumId, string $title, string $type): void
     {
         $client = static::createClient();
