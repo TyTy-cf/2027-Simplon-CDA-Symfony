@@ -1,0 +1,66 @@
+name: CI test backend
+on: [push]
+
+jobs:
+    symfony:
+    name: symfony
+    runs-on: ubuntu-latest
+    strategy:
+        fail-fast: true
+        matrix:
+            php-versions: ['8.5.4']
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+      
+      - name: Setup PHP, extensions and composer
+        uses: shivammathur/setup-php@verbose
+        with:
+          php-version: ${{ matrix.php-versions }}
+          extensions: mbstring, xml, ctype, iconv, intl, pdo_sqlite, dom, filter, json, pdo
+      
+      - name: Get composer cache directory
+        id: composer-cache
+        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+
+      - name: Cache composer dependencies
+        uses: actions/cache@v5
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: ${{ runner.os }}-composer-
+      
+      - name: Install composer dependencies
+        run: composer install --no-progress --no-suggest --prefer-dist --optimize-autoloader
+      
+      - name: Cache node_modules
+        uses: actions/cache@v5
+        id: yarn-cache-node-modules
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-yarn-cache-node-modules-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-cache-node-modules-
+      
+      - name: Yarn install
+        if: steps.yarn-cache-node-modules.outputs.cache-hit != 'true'
+        run: yarn install
+
+      - name: Yarn build
+        run: yarn run encore production
+      
+      - name: Archive production artifacts
+        uses: actions/upload-artifact@v7
+        with:
+          name: build
+          path: public/build
+      
+      - name: Check symfony console
+        run: |
+        php bin/console -V
+        php bin/console about
+
+      - name: Run test
+        run: |
+          php bin/phpunit --stop-on-failure
+
