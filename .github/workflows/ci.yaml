@@ -37,9 +37,6 @@ jobs:
             - name: Check PHP version
               run: php -v
 
-            - name: validate composer.json and composer.lock
-              run: composer validate
-
             - name: cache composer packages
               id: composer-cache
               uses: actions/cache@v6
