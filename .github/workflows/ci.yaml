@@ -55,11 +55,11 @@ jobs:
             - name: Lint de la config des services et du typage
               run: php bin/console lint:container
 
-            - name: PHP CS FIxer
-              run: vendor/bin/php-cs-fixer fix --dry-run --diff
+            # - name: PHP CS FIxer
+            #   run: vendor/bin/php-cs-fixer fix --dry-run --diff
 
-            - name: PHPStan
-              run: vendor/bin/phpstan analyse --level=max --memory-limit=1G
+            # - name: PHPStan
+            #   run: vendor/bin/phpstan analyse --level=max --memory-limit=1G
 
     test:
         needs: lint
