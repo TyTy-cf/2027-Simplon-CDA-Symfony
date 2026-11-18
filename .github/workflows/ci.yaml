@@ -1,64 +1,106 @@
-name: CI test backend
+name: CI de test pour le Back
 on: [push]
 
 jobs:
-    symfony:
-        name: symfony
+    install:
         runs-on: ubuntu-latest
-        env:
-            DATABASE_URL: "mysql://root:root@db:3306/harmonia?serverVersion=10.6.25-MariaDB&charset=utf8mb4"
-            ES_HOST: "localhost"
-            ES_PORT: "9209"
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v6
+
+            - name: Installer PHP
+              uses: shivammathur/setup-php@v2
+              with:
+                  php-version: "8.4"
+                  extensions: pdo_mysql
+
+            - name: Dépendances
+              run: composer install
+
+            - name: Mise en cache
+              uses: actions/cache@v5
+              with:
+                  path: |
+                      vendor
+                      assets/vendor
+                  key: deps-${{ hashFiles('composer.lock', 'importmap.php') }}
+
+    lint:
+        needs: install
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v6
+
+            - name: Installer PHP
+              uses: shivammathur/setup-php@v2
+              with:
+                  php-version: "8.4"
+                  extensions: pdo_mysql
+
+            - name: Récupération du cache
+              uses: actions/cache/restore@v5
+              with:
+                  path: |
+                      vendor
+                      assets/vendor
+                  key: deps-${{ hashFiles('composer.lock', 'importmap.php') }}
+
+            - name: Lint du YAML
+              run: php bin/console lint:yaml config
+
+            - name: Lint des templates Twig
+              run: php bin/console lint:twig templates
+
+            - name: Lint de la config des services et du typage
+              run: php bin/console lint:container
+
+            - name: PHP CS FIxer
+              run: vendor/bin/php-cs-fixer fix --dry-run --diff
+
+            - name: PHPStan
+              run: vendor/bin/phpstan analyse --level=max --memory-limit=1G
+
+    test:
+        needs: lint
+        runs-on: ubuntu-latest
         services:
-            mysql:
-                image: mysql:5.7
+            db:
+                image: mariadb:10.6
                 env:
                     MYSQL_ROOT_PASSWORD: root
                 ports:
                     - 3306:3306
-                options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
 
-        strategy:
-            fail-fast: true
-            matrix:
-                php-versions: ["8.5.4"]
+        env:
+            DATABASE_URL: "mysql://root:root@127.0.0.1:3306/harmonia?serverVersion=10.6.25-MariaDB&charset=utf8mb4"
 
         steps:
-            - name: checkout
-              uses: actions/checkout@v7
+            - name: Checkout code
+              uses: actions/checkout@v6
 
-            - name: Setup PHP, extensions and composer
+            - name: Installer PHP
               uses: shivammathur/setup-php@v2
               with:
-                  php-version: ${{ matrix.php-versions }}
-                  extensions: mbstring, xml, ctype, iconv, intl, pdo, pdo_mysql, dom, filter, gd, iconv, json, mbstring
-              env:
-                  update: true
-            - name: Check PHP version
-              run: php -v
+                  php-version: "8.4"
+                  extensions: pdo_mysql, intl
 
-            - name: cache composer packages
-              id: composer-cache
-              uses: actions/cache@v6
+            - name: Récupérer vendor depuis le cache
+              uses: actions/cache/restore@v5
               with:
-                  path: vendor
-                  key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock')}}
-                  restore-keys: |
-                      ${{ runner.os }}-php-${{ matrix.php-versions }}
+                  path: |
+                      vendor
+                      assets/vendor
+                  key: deps-${{ hashFiles('composer.lock', 'importmap.php') }}
 
-            - name: install dependencies
-              run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+            - name: Créer la base de test
+              run: php bin/console doctrine:database:create --if-not-exists --env=test
 
-            - name: Check Symfony requirements
-              run: vendor/bin/requirements-checker
+            - name: Faire les migrations
+              run: php bin/console doctrine:migrations:migrate --no-interaction --env=test
 
-            - name: Check the symfony console
-              run: |
-                  bin/console about
+            - name: Charger les données de test
+              run: mysql -h 127.0.0.1 -P 3306 -uroot -proot harmonia_test < docker/harmonia.sql
 
-            - name: Load Doctrine
-              run: |
-                  make load-fixtures
-
-            - name: Run fonctionnal and unit tests
-              run: make test
+            - name: Tests
+              run: php bin/phpunit
