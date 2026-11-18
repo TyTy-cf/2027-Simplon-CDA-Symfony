@@ -3,11 +3,7 @@
 namespace App\Factory;
 
 use App\Entity\Playlist;
-use App\Repository\PlaylistRepository;
-use Doctrine\ORM\EntityRepository;
 use Zenstruck\Foundry\Persistence\PersistentObjectFactory;
-use Zenstruck\Foundry\Persistence\Proxy;
-use Zenstruck\Foundry\Persistence\ProxyRepositoryDecorator;
 
 /**
  * @extends PersistentObjectFactory<Playlist>
@@ -19,7 +15,9 @@ final class PlaylistFactory extends PersistentObjectFactory
      *
      * @todo inject services if required
      */
-    public function __construct() {}
+    public function __construct()
+    {
+    }
 
     #[\Override]
     public static function class(): string
@@ -36,16 +34,17 @@ final class PlaylistFactory extends PersistentObjectFactory
     protected function defaults(): array|callable
     {
         $tracks = [];
-        for ($i = 0; $i < rand(4, 40); $i++) {
+        for ($i = 0; $i < rand(4, 40); ++$i) {
             array_push($tracks, TrackFactory::random());
         }
+
         return [
             'createdAt' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
             'isPublic' => self::faker()->boolean(),
-            "description" => self::faker()->paragraph(),
+            'description' => self::faker()->paragraph(),
             'name' => self::faker()->word(),
             'user' => UserFactory::random(),
-            "tracks" => $tracks
+            'tracks' => $tracks,
         ];
     }
 

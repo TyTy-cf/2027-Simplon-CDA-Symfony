@@ -5,7 +5,6 @@ namespace App\Controller;
 use App\Entity\Playlist;
 use App\Form\PlaylistType;
 use App\Repository\PlaylistRepository;
-use App\Repository\TrackRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,23 +17,24 @@ final class PlaylistController extends AbstractController
     public function index($id, PlaylistRepository $playlistRepository): Response
     {
         if (!$this->getUser()) {
-            return $this->redirectToRoute("app_login");
+            return $this->redirectToRoute('app_login');
         }
         $playlist = $playlistRepository->find($id);
-        if ($playlist === null) {
-            return $this->redirectToRoute("app_home");
+        if (null === $playlist) {
+            return $this->redirectToRoute('app_home');
         }
         if (!$playlist->isPublic() && $playlist->getUser() != $this->getUser()) {
-            return $this->redirectToRoute("app_home");
+            return $this->redirectToRoute('app_home');
         }
         $duration = 0;
         foreach ($playlist->getTracks() as $track) {
             $duration += $track->getDuration();
         }
         dump($duration);
+
         return $this->render('playlist/index.html.twig', [
             'playlist' => $playlist,
-            'duration' => $duration
+            'duration' => $duration,
         ]);
     }
 
@@ -42,7 +42,7 @@ final class PlaylistController extends AbstractController
     public function item(EntityManagerInterface $entityManager, Request $request): Response
     {
         if (!$this->getUser()) {
-            return $this->redirectToRoute("app_login");
+            return $this->redirectToRoute('app_login');
         }
         $playlist = new Playlist();
         $form = $this->createForm(PlaylistType::class, $playlist);
@@ -53,8 +53,10 @@ final class PlaylistController extends AbstractController
             $playlist->setUser($this->getUser());
             $entityManager->persist($playlist);
             $entityManager->flush();
-            return $this->redirectToRoute("app_profil", ['id' => $this->getUser()->getId()]);
+
+            return $this->redirectToRoute('app_profil', ['id' => $this->getUser()->getId()]);
         }
+
         return $this->render('playlist/add.html.twig', [
             'form' => $form->createView(),
         ]);

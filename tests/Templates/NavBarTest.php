@@ -13,8 +13,8 @@ class NavBarTest extends AbstractWebTestCase
         $crawlerLi = $crawler->filter('li > a.dropdown-item');
         $sorted = true;
         $temp = $crawlerLi->getNode(0)->nodeValue;
-        foreach($crawlerLi as $node){
-            if($node->nodeValue<$temp){
+        foreach ($crawlerLi as $node) {
+            if ($node->nodeValue < $temp) {
                 $sorted = false;
                 break;
             }

@@ -2,9 +2,7 @@
 
 namespace App\Form;
 
-use App\Entity\Album;
 use App\Entity\Genre;
-use App\Entity\Playlist;
 use App\Entity\Track;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -20,22 +18,22 @@ class TrackType extends AbstractType
             ->add('title')
             ->add('duration')
             ->add('number', null, [
-                'label' => "Track number"
+                'label' => 'Track number',
             ])
             ->add('isExplicit', null, [
-                'label' => "Song's lyrics are explicit ?"
+                'label' => "Song's lyrics are explicit ?",
             ])
             ->add('genres', EntityType::class, [
                 'class' => Genre::class,
                 'choice_label' => 'name',
                 'multiple' => true,
-                'expanded' => true
+                'expanded' => true,
             ])
             ->add('submit', SubmitType::class, [
                 'label' => 'Ajouter',
                 'attr' => [
                     'class' => 'btn btn-success',
-                ]
+                ],
             ])
         ;
     }

@@ -20,7 +20,7 @@ final class TrackController extends AbstractController
     public function item($id, TrackRepository $trackRepository): Response
     {
         $track = $trackRepository->find($id);
-        if ($track === null) {
+        if (null === $track) {
             return $this->redirectToRoute('app_home');
         }
 
@@ -34,7 +34,7 @@ final class TrackController extends AbstractController
     {
         $track = new Track();
         $album = $albumRepository->find($id);
-        if ($album === null) {
+        if (null === $album) {
             return $this->redirectToRoute('app_home');
         }
         $form = $this->createForm(TrackType::class, $track);
@@ -46,11 +46,13 @@ final class TrackController extends AbstractController
             $track->setListeningCount(0);
             $entityManager->persist($track);
             $entityManager->flush();
-            return $this->redirectToRoute("app_album_item", ['id' => $id]);
+
+            return $this->redirectToRoute('app_album_item', ['id' => $id]);
         }
+
         return $this->render('track/add.html.twig', [
             'form' => $form->createView(),
-            'album' => $album
+            'album' => $album,
         ]);
     }
 
@@ -58,19 +60,21 @@ final class TrackController extends AbstractController
     public function edit(EntityManagerInterface $entityManager, Request $request, $id, TrackRepository $trackRepository): Response
     {
         $track = $trackRepository->find($id);
-        if ($track === null) {
-            return $this->redirectToRoute("app_home");
+        if (null === $track) {
+            return $this->redirectToRoute('app_home');
         }
         $form = $this->createForm(TrackType::class, $track);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($track);
             $entityManager->flush();
-            return $this->redirectToRoute("app_track_item", ['id' => $track->getId()]);
+
+            return $this->redirectToRoute('app_track_item', ['id' => $track->getId()]);
         }
+
         return $this->render('track/edit.html.twig', [
             'form' => $form->createView(),
-            'track' => $track
+            'track' => $track,
         ]);
     }
 
@@ -78,7 +82,7 @@ final class TrackController extends AbstractController
     public function addToPlaylist($id, TrackRepository $trackRepository, PlaylistRepository $playlistRepository, EntityManagerInterface $entityManagerInterface, Request $request): Response
     {
         if (!$this->getUser()) {
-            return $this->redirectToRoute("app_login");
+            return $this->redirectToRoute('app_login');
         }
         $track = $trackRepository->find($id);
         $user = $this->getUser();
@@ -88,11 +92,12 @@ final class TrackController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManagerInterface->persist($track);
             $entityManagerInterface->flush();
-            return $this->redirectToRoute("app_track_item", ['id' => $track->getId()]);
+
+            return $this->redirectToRoute('app_track_item', ['id' => $track->getId()]);
         }
 
         return $this->render('playlist/addTrack.html.twig', [
-            'form' => $form->createView()
+            'form' => $form->createView(),
         ]);
     }
 }

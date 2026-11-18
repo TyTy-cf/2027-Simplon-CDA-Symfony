@@ -2,8 +2,6 @@
 
 namespace App\Form;
 
-use App\Entity\Album;
-use App\Entity\Genre;
 use App\Entity\Playlist;
 use App\Entity\Track;
 use Doctrine\ORM\EntityRepository;
@@ -16,10 +14,10 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class PlaylistTrackType extends AbstractType
 {
-
     public function __construct(
-        private Security $security
-    ) {}
+        private Security $security,
+    ) {
+    }
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {

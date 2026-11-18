@@ -6,7 +6,6 @@ use App\Tests\AbstractWebTestCase;
 
 class HomeControllerTest extends AbstractWebTestCase
 {
-
     public function testAccessOK(): void
     {
         $client = static::createClient();

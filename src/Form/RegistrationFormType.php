@@ -11,9 +11,7 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\IsTrue;
-use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
-
 
 class RegistrationFormType extends AbstractType
 {
@@ -24,7 +22,7 @@ class RegistrationFormType extends AbstractType
                 'label' => 'Email',
                 'attr' => [
                     'autocomplete' => 'off',
-                ]
+                ],
             ])
             ->add('agreeTerms', CheckboxType::class, [
                 'mapped' => false,
@@ -50,17 +48,17 @@ class RegistrationFormType extends AbstractType
                 ],
                 'attr' => [
                     'autocomplete' => 'new-password',
-                    'placeholder' => 'Choisissez un mot de passe'
+                    'placeholder' => 'Choisissez un mot de passe',
                 ],
                 'constraints' => [
                     new NotBlank(),
-                ]
+                ],
             ])
             ->add('submit', SubmitType::class, [
                 'label' => 'S\'inscrire',
                 'attr' => [
                     'class' => 'btn btn-success',
-                ]
+                ],
             ])
         ;
     }

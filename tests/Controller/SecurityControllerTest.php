@@ -27,18 +27,17 @@ class SecurityControllerTest extends AbstractWebTestCase
         $this->assertSelectorTextContains('button[type="submit"]', 'Se connecter');
     }
 
-    #[TestWith(['admin@admin.fr', '123', self::URL_HOME],'email correct')]
-    #[TestWith(['admin@admin.fr', '', self::URL_LOGIN],'mdp manquant')]
-    #[TestWith(['admin@admin.fr', '12345', self::URL_LOGIN],'mauvais mdp')]
-    #[TestWith(['admin@toto.fr', '123', self::URL_LOGIN],"mauvais domaine")]
-    #[TestWith(['', '123', self::URL_LOGIN],"pas de mail")]
-    #[TestWith(['', '', self::URL_LOGIN],'aucune données')]
+    #[TestWith(['admin@admin.fr', '123', self::URL_HOME], 'email correct')]
+    #[TestWith(['admin@admin.fr', '', self::URL_LOGIN], 'mdp manquant')]
+    #[TestWith(['admin@admin.fr', '12345', self::URL_LOGIN], 'mauvais mdp')]
+    #[TestWith(['admin@toto.fr', '123', self::URL_LOGIN], 'mauvais domaine')]
+    #[TestWith(['', '123', self::URL_LOGIN], 'pas de mail')]
+    #[TestWith(['', '', self::URL_LOGIN], 'aucune données')]
     public function testFormSubmit(
         string $email,
         string $password,
-        string $path
-    ): void
-    {
+        string $path,
+    ): void {
         $client = static::createClient();
         // $crawler => DOM / Page HTML
         $crawler = $client->request('GET', self::URL_LOGIN);
@@ -47,14 +46,14 @@ class SecurityControllerTest extends AbstractWebTestCase
         // si le button est bien enfant de la balise form /!\
         $form = $crawler->selectButton('Se connecter')->form();
         // Cas alternatif :
-//        $form = $crawler->filter('form[name="form[login]"]')->form();
+        //        $form = $crawler->filter('form[name="form[login]"]')->form();
         $form['email'] = $email;
         $form['password'] = $password;
         $client->submit($form);
 
         $this->assertResponseRedirects($path);
 
-        if ($path === self::URL_LOGIN) {
+        if (self::URL_LOGIN === $path) {
             // Nécessaire en cas de redirection SI on veut tester l'état du DOM post-redirection
             $client->followRedirect();
             $this->assertSelectorTextContains('div.alert.alert-danger', 'Invalid credentials.');

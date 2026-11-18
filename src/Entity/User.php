@@ -23,7 +23,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(length: 180)]
     #[Assert\NotBlank(message: "L'email doit avoir une valeur")]
-    #[Assert\Email(message: "Vous devez saisir un email")]
+    #[Assert\Email(message: 'Vous devez saisir un email')]
     private ?string $email = null;
 
     /**
@@ -133,7 +133,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function __serialize(): array
     {
         $data = (array) $this;
-        $data["\0" . self::class . "\0password"] = hash('crc32c', $this->password);
+        $data["\0".self::class."\0password"] = hash('crc32c', $this->password);
 
         return $data;
     }

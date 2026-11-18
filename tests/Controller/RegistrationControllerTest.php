@@ -8,8 +8,8 @@ use PHPUnit\Framework\Attributes\TestWith;
 
 class RegistrationControllerTest extends AbstractWebTestCase
 {
-    public function testFormSignInExist() : void
-    {   
+    public function testFormSignInExist(): void
+    {
         $client = static::createClient();
         $client->request('GET', self::URL_REGISTER);
 
@@ -19,22 +19,20 @@ class RegistrationControllerTest extends AbstractWebTestCase
         $this->assertSelectorExists('input[name="registration_form[plainPassword][second]"]');
     }
 
-
-    #[TestWith(['oskour@oskour.fr','oskour','oskour',302, null])]
-    #[TestWith(['oskouroskour.fr','oskour','oskour',422, 'Vous devez saisir un email'])]
-    #[TestWith(['oskour@oskour.fr','','',422,'This value should not be blank.'])]
-    #[TestWith(['oskour@oskour.fr','oskour','',422,'Les deux champs doivent être identiques.'])]
-    #[TestWith(['','oskour','oskour',422,"L'email doit avoir une valeur"])]
-    #[TestWith(['oskour@oskour.fr','oskour','jpp',422,'Les deux champs doivent être identiques.'])]
-    #[TestWith(['kelly.cassin@example.com','oskour','oskour',422,'There is already an account with this email'])]
+    #[TestWith(['oskour@oskour.fr', 'oskour', 'oskour', 302, null])]
+    #[TestWith(['oskouroskour.fr', 'oskour', 'oskour', 422, 'Vous devez saisir un email'])]
+    #[TestWith(['oskour@oskour.fr', '', '', 422, 'This value should not be blank.'])]
+    #[TestWith(['oskour@oskour.fr', 'oskour', '', 422, 'Les deux champs doivent être identiques.'])]
+    #[TestWith(['', 'oskour', 'oskour', 422, "L'email doit avoir une valeur"])]
+    #[TestWith(['oskour@oskour.fr', 'oskour', 'jpp', 422, 'Les deux champs doivent être identiques.'])]
+    #[TestWith(['kelly.cassin@example.com', 'oskour', 'oskour', 422, 'There is already an account with this email'])]
     public function testFormSubmit(
         string $email,
         string $password1,
         string $password2,
-        int  $code,
-        ?string $msg
-    ): void
-    {
+        int $code,
+        ?string $msg,
+    ): void {
         $client = static::createClient();
         $crawler = $client->request('GET', self::URL_REGISTER);
         $form = $crawler->selectButton("S'inscrire")->form();
@@ -46,13 +44,13 @@ class RegistrationControllerTest extends AbstractWebTestCase
 
         $this->assertResponseStatusCodeSame($code);
 
-        if($msg !== null){
+        if (null !== $msg) {
             $this->assertSelectorTextContains('div.invalid-feedback.d-block', $msg);
         }
 
         $userRepo = $this->getRepository(UserRepository::class);
-        $user = $userRepo->findOneBy(["email"=>$email]);
-        if($code === 302){
+        $user = $userRepo->findOneBy(['email' => $email]);
+        if (302 === $code) {
             $this->removeEntity($user);
         }
     }

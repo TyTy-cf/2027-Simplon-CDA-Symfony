@@ -4,12 +4,11 @@ namespace App\Controller;
 
 use App\Entity\Artist;
 use App\Repository\ArtistRepository;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Knp\Component\Pager\PaginatorInterface;
-
 
 #[Route('/artiste', name: 'app_artist_')]
 final class ArtistController extends AbstractController
@@ -17,12 +16,12 @@ final class ArtistController extends AbstractController
     #[Route('', name: 'index')]
     public function index(ArtistRepository $artistRepository, Request $request, PaginatorInterface $paginator): Response
     {
-
         $pagination = $paginator->paginate(
             $artistRepository->getAll(),
-            $request->query->get('page',1),
+            $request->query->get('page', 1),
             5
         );
+
         return $this->render('artist/index.html.twig', [
             'artists' => $pagination,
         ]);

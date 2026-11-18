@@ -1,20 +1,17 @@
 <?php
 
-
 namespace App\Tests\Controller;
-
 
 use App\Tests\AbstractWebTestCase;
 use PHPUnit\Framework\Attributes\TestWith;
 
 /**
- * Class ProfilController.php
+ * Class ProfilController.php.
  *
  * @author Kevin Tourret
  */
 class ProfilControllerTest extends AbstractWebTestCase
 {
-
     #[TestWith(['kelly.cassin@example.com'])]
     #[TestWith(['admin@admin.fr'])]
     public function testAccessOK(string $email): void
@@ -25,7 +22,7 @@ class ProfilControllerTest extends AbstractWebTestCase
         $client->request('GET', self::URL_PROFILE);
 
         $this->assertResponseIsSuccessful();
-        $this->assertSelectorTextContains('h1', 'Welcome ' . $email);
+        $this->assertSelectorTextContains('h1', 'Welcome '.$email);
     }
 
     public function testAccessKO(): void
@@ -35,5 +32,4 @@ class ProfilControllerTest extends AbstractWebTestCase
 
         $this->assertResponseRedirects(self::URL_LOGIN);
     }
-
 }

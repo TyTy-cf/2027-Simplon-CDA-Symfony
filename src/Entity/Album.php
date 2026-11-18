@@ -14,11 +14,11 @@ class Album
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['album:read','album:search'])]
+    #[Groups(['album:read', 'album:search'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['album:read','album:search'])]
+    #[Groups(['album:read', 'album:search'])]
     private ?string $title = null;
 
     #[ORM\Column]

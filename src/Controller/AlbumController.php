@@ -15,27 +15,27 @@ final class AlbumController extends AbstractController
     public function item(int $id, AlbumRepository $albumRepository, TrackRepository $trackRepository): Response
     {
         $album = $albumRepository->find($id);
-        if ($album === null) {
+        if (null === $album) {
             return $this->redirectToRoute('app_home');
         }
         if (count($album->getTracks()) > 0) {
-            $duration = (int)$trackRepository->findTotalDuration($album);
+            $duration = (int) $trackRepository->findTotalDuration($album);
         } else {
             $duration = 0;
         }
 
         return $this->render('album/item.html.twig', [
             'album' => $album,
-            'duration' => $duration
+            'duration' => $duration,
         ]);
     }
 
     #[Route('/album-search', name: 'app_album_search')]
     public function searchAlbum(AlbumRepository $albumRepository, Request $request): Response
     {
-        $search = $request->query->get('search',"");
+        $search = $request->query->get('search', '');
         $albums = $albumRepository->findByTitleLike($search);
 
-        return $this->json(['albums'=>$albums], 200, [], ['groups'=>['album:search']]);
+        return $this->json(['albums' => $albums], 200, [], ['groups' => ['album:search']]);
     }
 }

@@ -21,7 +21,7 @@ class AlbumType extends AbstractType
         $builder
             ->add('title')
             ->add('releasedAt', null, [
-                'widget' => 'single_text'
+                'widget' => 'single_text',
             ])
             ->add('poster', FileType::class, [
                 'label' => 'Poster (jpg file)',
@@ -31,8 +31,8 @@ class AlbumType extends AbstractType
                     new Assert\File(
                         extensions: ['jpg'],
                         extensionsMessage: 'PLease upload a valid jpg file'
-                    )
-                ]
+                    ),
+                ],
             ])
             ->add('artist', EntityType::class, [
                 'label' => 'Artiste',
@@ -41,20 +41,20 @@ class AlbumType extends AbstractType
                 'query_builder' => function (ArtistRepository $artistRepository) {
                     return $artistRepository->createQueryBuilder('a')
                         ->orderBy('a.stageName', 'ASC');
-                }
+                },
             ])
             ->add('type', ChoiceType::class, [
                 'choices' => [
                     'EP' => 'EP',
                     'album' => 'album',
-                    'single' => 'single'
-                ]
+                    'single' => 'single',
+                ],
             ])
             ->add('submit', SubmitType::class, [
                 'label' => 'Ajouter',
                 'attr' => [
                     'class' => 'btn btn-success',
-                ]
+                ],
             ])
         ;
     }

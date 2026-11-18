@@ -41,7 +41,7 @@ class ArtistType extends AbstractType
                 'label' => 'Ajouter',
                 'attr' => [
                     'class' => 'btn btn-success',
-                ]
+                ],
             ])
         ;
     }

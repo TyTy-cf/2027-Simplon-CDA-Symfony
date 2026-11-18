@@ -7,7 +7,6 @@ use PHPUnit\Framework\Attributes\TestWith;
 
 class FavoriteControllerTest extends AbstractWebTestCase
 {
-
     #[TestWith(['kelly.cassin@example.com'])]
     #[TestWith(['admin@admin.fr'])]
     public function testAccessOK(string $email): void
@@ -28,5 +27,4 @@ class FavoriteControllerTest extends AbstractWebTestCase
 
         $this->assertResponseRedirects(self::URL_LOGIN);
     }
-
 }

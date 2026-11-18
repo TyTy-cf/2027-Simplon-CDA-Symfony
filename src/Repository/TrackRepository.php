@@ -3,7 +3,6 @@
 namespace App\Repository;
 
 use App\Entity\Album;
-use App\Entity\Playlist;
 use App\Entity\Track;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;

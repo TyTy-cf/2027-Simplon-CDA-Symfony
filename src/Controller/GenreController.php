@@ -13,9 +13,10 @@ final class GenreController extends AbstractController
     public function index($id, GenreRepository $genreRepository): Response
     {
         $genre = $genreRepository->find($id);
-        if ($genre === null) {
-            return $this->redirectToRoute("app_home");
+        if (null === $genre) {
+            return $this->redirectToRoute('app_home');
         }
+
         return $this->render('genre/index.html.twig', [
             'genre' => $genre,
         ]);

@@ -12,7 +12,6 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\String\Slugger\SluggerInterface;
@@ -39,13 +38,12 @@ final class AlbumController extends AbstractController
 
     #[Route('/new', name: 'new')]
     public function new(
-        EntityManagerInterface                                    $entityManager,
-        Request                                                   $request,
-        ArtistRepository                                          $artistRepository,
-        SluggerInterface                                          $slugger,
-        #[Autowire('%kernel.project_dir%/public/uploads')] string $imgDirectory
-    ): Response
-    {
+        EntityManagerInterface $entityManager,
+        Request $request,
+        ArtistRepository $artistRepository,
+        SluggerInterface $slugger,
+        #[Autowire('%kernel.project_dir%/public/uploads')] string $imgDirectory,
+    ): Response {
         $album = new Album();
         $form = $this->createForm(AlbumType::class, $album);
         $form->handleRequest($request);
@@ -56,7 +54,7 @@ final class AlbumController extends AbstractController
             if ($img) {
                 $ogFilename = pathinfo($img->getClientOriginalName(), PATHINFO_FILENAME);
                 $safeFilename = $slugger->slug($ogFilename);
-                $newFilename = 'uploads/' . $safeFilename . '-' . bin2hex(random_bytes(16)) . '.' . $img->guessExtension();
+                $newFilename = 'uploads/'.$safeFilename.'-'.bin2hex(random_bytes(16)).'.'.$img->guessExtension();
 
                 try {
                     $img->move($imgDirectory, $newFilename);
@@ -66,8 +64,10 @@ final class AlbumController extends AbstractController
             }
             $entityManager->persist($album);
             $entityManager->flush();
-            return $this->redirectToRoute("admin_album_index");
+
+            return $this->redirectToRoute('admin_album_index');
         }
+
         return $this->render('admin/album/new.html.twig', [
             'form' => $form->createView(),
         ]);
@@ -75,13 +75,12 @@ final class AlbumController extends AbstractController
 
     #[Route('/{id}/edit', name: 'edit', requirements: ['id' => '\d+'])]
     public function edit(
-        EntityManagerInterface                                    $entityManager,
-        Request                                                   $request,
-        Album                                                     $album,
-        SluggerInterface                                          $slugger,
-        #[Autowire('%kernel.project_dir%/public/uploads')] string $imgDirectory
-    ): Response
-    {
+        EntityManagerInterface $entityManager,
+        Request $request,
+        Album $album,
+        SluggerInterface $slugger,
+        #[Autowire('%kernel.project_dir%/public/uploads')] string $imgDirectory,
+    ): Response {
         $form = $this->createForm(AlbumType::class, $album);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -91,7 +90,7 @@ final class AlbumController extends AbstractController
             if ($img) {
                 $ogFilename = pathinfo($img->getClientOriginalName(), PATHINFO_FILENAME);
                 $safeFilename = $slugger->slug($ogFilename);
-                $newFilename = 'uploads/' . $safeFilename . '-' . uniqid() . '.' . $img->guessExtension();
+                $newFilename = 'uploads/'.$safeFilename.'-'.uniqid().'.'.$img->guessExtension();
 
                 try {
                     $img->move($imgDirectory, $newFilename);
@@ -101,11 +100,13 @@ final class AlbumController extends AbstractController
             }
             $entityManager->persist($album);
             $entityManager->flush();
-            return $this->redirectToRoute("admin_artist_show", ['id' => $album->getArtist()->getId()]);
+
+            return $this->redirectToRoute('admin_artist_show', ['id' => $album->getArtist()->getId()]);
         }
+
         return $this->render('admin/album/edit.html.twig', [
             'form' => $form->createView(),
-            'album' => $album
+            'album' => $album,
         ]);
     }
 }

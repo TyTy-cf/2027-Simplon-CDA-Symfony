@@ -20,9 +20,10 @@ final class ArtistController extends AbstractController
     public function show($id, ArtistRepository $artistRepository): Response
     {
         $artist = $artistRepository->find($id);
-        if ($artist === null) {
-            return $this->redirectToRoute("app_home");
+        if (null === $artist) {
+            return $this->redirectToRoute('app_home');
         }
+
         return $this->render('admin/artist/show.html.twig', [
             'artist' => $artist,
         ]);
@@ -32,6 +33,7 @@ final class ArtistController extends AbstractController
     public function index(ArtistRepository $artistRepository): Response
     {
         $artists = $artistRepository->findAll();
+
         return $this->render('admin/artist/index.html.twig', [
             'artists' => $artists,
         ]);
@@ -48,8 +50,10 @@ final class ArtistController extends AbstractController
             $artist->setCreatedAt(new \DateTimeImmutable());
             $entityManager->persist($artist);
             $entityManager->flush();
-            return $this->redirectToRoute("admin_artist_index");
+
+            return $this->redirectToRoute('admin_artist_index');
         }
+
         return $this->render('admin/artist/new.html.twig', [
             'form' => $form->createView(),
         ]);
@@ -64,11 +68,13 @@ final class ArtistController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($artist);
             $entityManager->flush();
-            return $this->redirectToRoute("admin_artist_index");
+
+            return $this->redirectToRoute('admin_artist_index');
         }
+
         return $this->render('admin/artist/edit.html.twig', [
             'form' => $form->createView(),
-            'artist' => $artist
+            'artist' => $artist,
         ]);
     }
 }

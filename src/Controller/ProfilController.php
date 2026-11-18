@@ -9,7 +9,6 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class ProfilController extends AbstractController
 {
-
     #[Route('/profil', name: 'app_profil')]
     public function item(): Response
     {
@@ -17,13 +16,12 @@ final class ProfilController extends AbstractController
         // Récupère l'utilisateur connecté !
         $user = $this->getUser();
 
-        if ($user === null) {
-            return $this->redirectToRoute("app_login");
+        if (null === $user) {
+            return $this->redirectToRoute('app_login');
         }
 
         return $this->render('profil/item.html.twig', [
             'user' => $user,
         ]);
     }
-
 }

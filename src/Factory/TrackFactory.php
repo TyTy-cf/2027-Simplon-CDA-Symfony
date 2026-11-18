@@ -3,11 +3,7 @@
 namespace App\Factory;
 
 use App\Entity\Track;
-use App\Repository\TrackRepository;
-use Doctrine\ORM\EntityRepository;
 use Zenstruck\Foundry\Persistence\PersistentObjectFactory;
-use Zenstruck\Foundry\Persistence\Proxy;
-use Zenstruck\Foundry\Persistence\ProxyRepositoryDecorator;
 
 /**
  * @extends PersistentObjectFactory<Track>
@@ -19,7 +15,9 @@ final class TrackFactory extends PersistentObjectFactory
      *
      * @todo inject services if required
      */
-    public function __construct() {}
+    public function __construct()
+    {
+    }
 
     #[\Override]
     public static function class(): string
@@ -36,9 +34,10 @@ final class TrackFactory extends PersistentObjectFactory
     protected function defaults(): array|callable
     {
         $genres = [GenreFactory::random()];
-        if (rand(0, 1) == 0) {
+        if (0 == rand(0, 1)) {
             array_push($genres, GenreFactory::random());
         }
+
         return [
             'album' => AlbumFactory::random(),
             'genres' => $genres,
