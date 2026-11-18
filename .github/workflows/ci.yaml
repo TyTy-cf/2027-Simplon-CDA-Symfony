@@ -55,6 +55,9 @@ jobs:
             - name: Lint de la config des services et du typage
               run: php bin/console lint:container
 
+            - name: PHP CS Fixer
+              run: vendor/bin/php-cs-fixer fix --dry-run --diff
+
             - name: PHPStan
               run: vendor/bin/phpstan analyse
               continue-on-error: true
