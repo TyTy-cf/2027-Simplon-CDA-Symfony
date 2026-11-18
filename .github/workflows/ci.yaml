@@ -55,6 +55,9 @@ jobs:
             - name: Lint de la config des services et du typage
               run: php bin/console lint:container
 
+            - name: PHPStan
+              run: vendor/bin/phpstan analyse
+
     test:
         needs: lint
         runs-on: ubuntu-latest
