@@ -5,61 +5,75 @@ jobs:
     symfony:
         name: symfony
         runs-on: ubuntu-latest
+        env:
+            DATABASE_URL: "mysql://root:root@db:3306/harmonia?serverVersion=10.6.25-MariaDB&charset=utf8mb4"
+            ES_HOST: "localhost"
+            ES_PORT: "9209"
+        services:
+            mysql:
+                image: mysql:5.7
+                env:
+                    MYSQL_ROOT_PASSWORD: root
+                ports:
+                    - 3306:3306
+                options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+
         strategy:
             fail-fast: true
             matrix:
                 php-versions: ["8.5.4"]
+
         steps:
-            - name: Checkout
+            - name: checkout
               uses: actions/checkout@v7
 
             - name: Setup PHP, extensions and composer
-              uses: shivammathur/setup-php@verbose
+              uses: shivammathur/setup-php@v2
               with:
                   php-version: ${{ matrix.php-versions }}
-                  extensions: mbstring, xml, ctype, iconv, intl, pdo_sqlite, dom, filter, json, pdo
+                  extensions: mbstring, xml, ctype, iconv, intl, pdo, pdo_mysql, dom, filter, gd, iconv, json, mbstring
+              env:
+                  update: true
+            - name: Check PHP version
+              run: php -v
 
-            - name: Get composer cache directory
-              id: composer-cache
-              run: echo "::set-output name=dir::$(composer config cache-files-dir)"
-
-            - name: Cache composer dependencies
-              uses: actions/cache@v5
+            - name: Nodejs install
+              uses: actions/setup-node@v7
               with:
-                  path: ${{ steps.composer-cache.outputs.dir }}
-                  key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
-                  restore-keys: ${{ runner.os }}-composer-
+                  node-version: "24"
+            - run: yarn install
 
-            - name: Install composer dependencies
-              run: composer install --no-progress --no-suggest --prefer-dist --optimize-autoloader
-
-            - name: Cache node_modules
-              uses: actions/cache@v5
-              id: yarn-cache-node-modules
-              with:
-                  path: node_modules
-                  key: ${{ runner.os }}-yarn-cache-node-modules-${{ hashFiles('**/yarn.lock') }}
-                  restore-keys: |
-                      ${{ runner.os }}-yarn-cache-node-modules-
-
-            - name: Yarn install
-              if: steps.yarn-cache-node-modules.outputs.cache-hit != 'true'
-              run: yarn install
-
-            - name: Yarn build
+            - name: yarn build
               run: yarn run encore production
 
-            - name: Archive production artifacts
-              uses: actions/upload-artifact@v7
+            - name: validate composer.json and composer.lock
+              run: composer validate
+
+            - name: cache composer packages
+              id: composer-cache
+              uses: actions/cache@v6
               with:
-                  name: build
-                  path: public/build
+                  path: vendor
+                  key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock')}}
+                  restore-keys: |
+                      ${{ runner.os }}-php-${{ matrix.php-versions }}
 
-            - name: Check symfony console
-              run: |
-                  php bin/console -V
-                  php bin/console about
+            - name: install dependencies
+              run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
 
-            - name: Run test
+            - name: security audit of dependencies
+              run: composer audit
+
+            - name: Check Symfony requirements
+              run: vendor/bin/requirements-checker
+
+            - name: Check the symfony console
               run: |
-                  php bin/phpunit --stop-on-failure
+                  bin/console about
+
+            - name: Load Doctrine
+              run: |
+                  make load-fixtures
+
+            - name: Run fonctionnal and unit tests
+              run: make test
