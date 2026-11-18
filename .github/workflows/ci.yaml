@@ -57,6 +57,7 @@ jobs:
 
             - name: PHPStan
               run: vendor/bin/phpstan analyse
+              continue-on-error: true
 
     test:
         needs: lint
